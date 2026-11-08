@@ -1,0 +1,825 @@
+
+/**
+ * ============================================================
+ *                    OUTRUN TOMORROW
+ * ============================================================
+ *
+ * Monochrome arcade racing title screen.
+ *
+ *
+ * Platform: nand2tetris Jack
+ * Resolution: 512 x 256
+ * ============================================================
+ */
+
+class Main {
+
+    function void main() {
+        var char key;
+
+        // =============================================
+        // 1. BACKGROUND
+        // =============================================
+
+        do Screen.setColor(true);
+        do Screen.clearScreen();
+
+        do Screen.drawRectangle(0, 0, 511, 255);
+
+        // =============================================
+        // 2. ENVIRONMENT
+        // =============================================
+
+        do Main.drawStars();
+        do Main.drawMoon();
+        do Main.drawTrack();
+
+        // =============================================
+        // 3. SPACECRAFT
+        // =============================================
+
+        do Main.drawShip();
+
+        // =============================================
+        // 4. INTERFACE
+        // =============================================
+
+        do Main.drawHUD();
+
+         // =============================================
+        // 5. WAIT FOR ANY KEY
+        // =============================================
+        let key = 0;
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+        }
+        
+        // --- NEW INTEGRATION ---
+        // Clear the title screen
+        do Screen.setColor(false);
+        do Screen.clearScreen();
+        
+        // Boot the engine
+        var GameEngine game;
+        let game = GameEngine.new();
+        do game.run();
+        do game.dispose();
+
+        return;
+    }
+
+
+    // ====================================================
+    // STARS
+    // ====================================================
+
+    function void drawStars() {
+
+        do Screen.setColor(false);
+
+        // Individual stars
+        do Screen.drawPixel(25, 25);
+        do Screen.drawPixel(75, 45);
+        do Screen.drawPixel(115, 18);
+        do Screen.drawPixel(160, 60);
+        do Screen.drawPixel(195, 25);
+        do Screen.drawPixel(305, 35);
+        do Screen.drawPixel(345, 15);
+        do Screen.drawPixel(475, 30);
+        do Screen.drawPixel(485, 85);
+        do Screen.drawPixel(30, 85);
+        do Screen.drawPixel(90, 95);
+        do Screen.drawPixel(145, 75);
+        do Screen.drawPixel(350, 90);
+        do Screen.drawPixel(470, 105);
+
+        // Bright stars
+        do Screen.drawLine(60, 29, 60, 31);
+        do Screen.drawLine(59, 30, 61, 30);
+
+        do Screen.drawLine(320, 69, 320, 71);
+        do Screen.drawLine(319, 70, 321, 70);
+
+        do Screen.drawLine(120, 49, 120, 51);
+        do Screen.drawLine(119, 50, 121, 50);
+
+        return;
+    }
+
+
+    // ====================================================
+    // MOON
+    // ====================================================
+
+   
+       function void drawMoon() {
+        var int y, dy, width;
+
+        // =================================================
+        // HALF-LIT MOON
+        // Left hemisphere illuminated; right hemisphere
+        // disappears into the black sky.
+        // =================================================
+
+        do Screen.setColor(false);
+
+        let y = 3;
+        while (y < 185) {
+            let dy = y - 94;
+            if (dy < 0) {
+                let dy = 0 - dy;
+            }
+
+            if (dy < 92) {
+                let width = 92 - ((dy * dy) / 92);
+                do Screen.drawLine(390 - width, y, 390, y);
+            }
+
+            let y = y + 1;
+        }
+
+        // Irregular terminator: the boundary between light
+        // and darkness should not look mechanically perfect.
+        do Screen.drawLine(389, 8, 391, 18);
+        do Screen.drawLine(388, 29, 391, 40);
+        do Screen.drawLine(389, 54, 390, 66);
+        do Screen.drawLine(388, 82, 391, 96);
+        do Screen.drawLine(389, 113, 390, 127);
+        do Screen.drawLine(388, 144, 391, 157);
+        do Screen.drawLine(389, 171, 390, 181);
+
+        // =================================================
+        // BRIGHT SIDE: DARK MARIA AND IMPACT BASINS
+        // =================================================
+
+        do Screen.setColor(true);
+
+        // Broad volcanic plains
+        do Screen.drawCircle(350, 56, 25);
+        do Screen.drawCircle(350, 56, 21);
+        do Screen.drawCircle(329, 112, 18);
+        do Screen.drawCircle(329, 112, 14);
+        do Screen.drawCircle(365, 151, 17);
+        do Screen.drawCircle(365, 151, 13);
+
+        // Large crater, upper-left
+        do Screen.drawCircle(350, 39, 17);
+        do Screen.drawCircle(350, 39, 14);
+
+        do Screen.setColor(false);
+        do Screen.drawCircle(347, 36, 15);
+        do Screen.drawCircle(347, 36, 11);
+
+        do Screen.setColor(true);
+        do Screen.drawCircle(353, 42, 9);
+        do Screen.drawCircle(353, 42, 5);
+
+        // Large crater, lower-left
+        do Screen.drawCircle(350, 139, 20);
+        do Screen.drawCircle(350, 139, 16);
+
+        do Screen.setColor(false);
+        do Screen.drawCircle(347, 136, 18);
+        do Screen.drawCircle(347, 136, 13);
+
+        do Screen.setColor(true);
+        do Screen.drawCircle(354, 143, 10);
+        do Screen.drawCircle(354, 143, 6);
+
+        // Smaller craters on the illuminated surface
+        do Screen.setColor(true);
+        do Screen.drawCircle(312, 77, 9);
+        do Screen.drawCircle(312, 77, 6);
+        do Screen.drawCircle(379, 23, 8);
+        do Screen.drawCircle(379, 23, 5);
+        do Screen.drawCircle(381, 91, 11);
+        do Screen.drawCircle(381, 91, 8);
+        do Screen.drawCircle(307, 143, 7);
+        do Screen.drawCircle(307, 143, 4);
+        do Screen.drawCircle(380, 171, 7);
+        do Screen.drawCircle(380, 171, 4);
+
+        do Screen.setColor(false);
+        do Screen.drawCircle(310, 75, 7);
+        do Screen.drawCircle(377, 21, 6);
+        do Screen.drawCircle(379, 89, 9);
+        do Screen.drawCircle(305, 141, 5);
+        do Screen.drawCircle(378, 169, 5);
+
+        // =================================================
+        // DARK SIDE: CRATERS VISIBLE ONLY BY THEIR RIMS
+        // =================================================
+
+        do Screen.setColor(false);
+
+        // Enormous dark basin near the upper terminator
+        do Screen.drawCircle(416, 48, 27);
+        do Screen.drawCircle(416, 48, 24);
+        do Screen.drawCircle(416, 48, 20);
+
+        // Black center blends into the sky
+        do Screen.setColor(true);
+        do Screen.drawCircle(420, 52, 19);
+        do Screen.drawCircle(420, 52, 15);
+
+        // Secondary dark-side basin
+        do Screen.setColor(false);
+        do Screen.drawCircle(444, 112, 23);
+        do Screen.drawCircle(444, 112, 20);
+        do Screen.drawCircle(444, 112, 16);
+
+        do Screen.setColor(true);
+        do Screen.drawCircle(448, 116, 16);
+        do Screen.drawCircle(448, 116, 12);
+
+        // Lower dark-side crater
+        do Screen.setColor(false);
+        do Screen.drawCircle(407, 155, 17);
+        do Screen.drawCircle(407, 155, 14);
+        do Screen.drawCircle(407, 155, 10);
+
+        do Screen.setColor(true);
+        do Screen.drawCircle(410, 158, 11);
+        do Screen.drawCircle(410, 158, 7);
+
+        // Small crater rims floating in darkness
+        do Screen.setColor(false);
+        do Screen.drawCircle(471, 69, 8);
+        do Screen.drawCircle(471, 69, 6);
+        do Screen.drawCircle(477, 145, 6);
+        do Screen.drawCircle(477, 145, 4);
+        do Screen.drawCircle(431, 178, 7);
+        do Screen.drawCircle(431, 178, 5);
+        do Screen.drawCircle(398, 15, 6);
+        do Screen.drawCircle(398, 15, 4);
+
+        // =================================================
+        // RAISED RIMS, RAYS AND GEOLOGICAL SCARS
+        // =================================================
+
+        do Screen.drawLine(328, 28, 337, 20);
+        do Screen.drawLine(337, 20, 349, 17);
+        do Screen.drawLine(349, 17, 360, 21);
+
+        do Screen.drawLine(332, 124, 340, 117);
+        do Screen.drawLine(340, 117, 351, 115);
+        do Screen.drawLine(351, 115, 362, 120);
+
+        do Screen.drawLine(399, 29, 407, 23);
+        do Screen.drawLine(407, 23, 418, 21);
+        do Screen.drawLine(418, 21, 429, 26);
+
+        do Screen.drawLine(426, 94, 435, 88);
+        do Screen.drawLine(435, 88, 447, 89);
+        do Screen.drawLine(447, 89, 457, 96);
+
+        do Screen.drawLine(394, 143, 400, 135);
+        do Screen.drawLine(400, 135, 411, 132);
+        do Screen.drawLine(411, 132, 421, 137);
+
+        // Long fractures crossing the terminator
+        do Screen.setColor(true);
+        do Screen.drawLine(386, 62, 394, 55);
+        do Screen.drawLine(394, 55, 399, 44);
+        do Screen.drawLine(399, 44, 408, 39);
+
+        do Screen.drawLine(384, 108, 394, 101);
+        do Screen.drawLine(394, 101, 401, 91);
+        do Screen.drawLine(401, 91, 411, 87);
+
+        do Screen.drawLine(383, 148, 393, 153);
+        do Screen.drawLine(393, 153, 398, 164);
+        do Screen.drawLine(398, 164, 407, 170);
+
+        do Screen.drawLine(361, 67, 371, 73);
+        do Screen.drawLine(371, 73, 376, 84);
+        do Screen.drawLine(376, 84, 385, 88);
+
+        do Screen.drawLine(337, 157, 330, 166);
+        do Screen.drawLine(330, 166, 325, 176);
+
+        // Fine surface marks on the lit hemisphere
+        do Screen.setColor(true);
+        do Screen.drawPixel(310, 31);
+        do Screen.drawPixel(322, 44);
+        do Screen.drawPixel(337, 67);
+        do Screen.drawPixel(365, 76);
+        do Screen.drawPixel(372, 48);
+        do Screen.drawPixel(316, 101);
+        do Screen.drawPixel(340, 96);
+        do Screen.drawPixel(360, 111);
+        do Screen.drawPixel(374, 128);
+        do Screen.drawPixel(319, 159);
+        do Screen.drawPixel(343, 176);
+        do Screen.drawPixel(367, 163);
+
+        // Sparse bright flecks on the dark side
+        do Screen.setColor(false);
+        do Screen.drawPixel(459, 35);
+        do Screen.drawPixel(466, 51);
+        do Screen.drawPixel(482, 91);
+        do Screen.drawPixel(463, 132);
+        do Screen.drawPixel(425, 137);
+        do Screen.drawPixel(438, 166);
+
+        return;
+    }
+
+
+
+
+    // ====================================================
+    // PERSPECTIVE TRACK
+    // ====================================================
+
+    function void drawTrack() {
+        var int x;
+
+        do Screen.setColor(false);
+
+        // Radial perspective lines
+        let x = 0;
+
+        while (x < 512) {
+            do Screen.drawLine(256, 110, x, 255);
+            let x = x + 32;
+        }
+
+        // Track boundaries
+        do Screen.drawLine(20, 255, 240, 110);
+        do Screen.drawLine(490, 255, 272, 110);
+
+        // Perspective markers
+        do Screen.drawLine(250, 125, 262, 125);
+        do Screen.drawLine(248, 140, 264, 140);
+        do Screen.drawLine(244, 160, 268, 160);
+
+        // Roadside details
+        do Screen.drawLine(20, 180, 25, 180);
+        do Screen.drawLine(480, 180, 485, 180);
+
+        do Screen.drawLine(10, 215, 25, 215);
+        do Screen.drawLine(485, 215, 500, 215);
+
+        return;
+    }
+
+
+    // ====================================================
+    // SPACECRAFT
+    // ====================================================
+
+    function void drawShip() {
+        var int x, y, width;
+
+        // =============================================
+        // A. MAIN WHITE SILHOUETTE
+        // =============================================
+
+        do Screen.setColor(false);
+
+        // Upper wing
+        let y = 40;
+
+        while (y < 120) {
+            let width = (y - 40) / 3;
+
+            do Screen.drawLine(
+                220 - width, y,
+                230 + width, y
+            );
+
+            let y = y + 1;
+        }
+
+        // Lower wing
+        let y = 160;
+
+        while (y < 240) {
+            let width = (240 - y) / 3;
+
+            do Screen.drawLine(
+                220 - width, y,
+                230 + width, y
+            );
+
+            let y = y + 1;
+        }
+
+        // Rear hull
+        let x = 180;
+
+        while (x < 240) {
+            let width = 20 + ((x - 180) / 3);
+
+            do Screen.drawLine(
+                x, 140 - width,
+                x, 140 + width
+            );
+
+            let x = x + 1;
+        }
+
+        // Front hull
+        let x = 240;
+
+        while (x < 320) {
+            let width = (320 - x) / 2;
+
+            do Screen.drawLine(
+                x, 140 - width,
+                x, 140 + width
+            );
+
+            let x = x + 1;
+        }
+
+        // Engine housings
+        do Screen.drawCircle(175, 120, 15);
+        do Screen.drawCircle(175, 160, 15);
+
+
+        // =============================================
+        // B. DEEP ARMOR SHADOWS
+        // =============================================
+
+        do Screen.setColor(true);
+
+        // Rear hull underside
+        let x = 185;
+
+        while (x < 240) {
+            let width = 20 + ((x - 180) / 3);
+
+            do Screen.drawLine(
+                x, 145,
+                x, 140 + width
+            );
+
+            let x = x + 1;
+        }
+
+        // Rear upper armor
+        let x = 190;
+
+        while (x < 235) {
+            do Screen.drawLine(x, 110, x, 120);
+            let x = x + 2;
+        }
+
+        // Forward underside
+        let x = 245;
+
+        while (x < 310) {
+            let width = (320 - x) / 2;
+
+            do Screen.drawLine(
+                x, 140 + width - 5,
+                x, 140 + width
+            );
+
+            let x = x + 1;
+        }
+
+        // Forward armor plating
+        do Screen.drawLine(245, 130, 275, 130);
+        do Screen.drawLine(245, 150, 285, 150);
+
+        // Upper wing armor
+        let y = 85;
+
+        while (y < 115) {
+            do Screen.drawLine(210, y, 225, y);
+            let y = y + 2;
+        }
+
+        // Lower wing armor
+        let y = 175;
+
+        while (y < 225) {
+            do Screen.drawLine(210, y, 225, y);
+            let y = y + 2;
+        }
+
+
+        // =============================================
+        // C. COCKPIT
+        // =============================================
+
+        do Screen.drawCircle(260, 135, 15);
+        do Screen.drawCircle(260, 135, 11);
+
+        // Cockpit reflection
+        do Screen.setColor(false);
+
+        do Screen.drawLine(254, 127, 260, 124);
+        do Screen.drawLine(253, 130, 256, 128);
+
+        // Dark glass interior
+        do Screen.setColor(true);
+
+        do Screen.drawCircle(260, 135, 8);
+
+        // Small glass highlights
+        do Screen.setColor(false);
+
+        do Screen.drawPixel(257, 130);
+        do Screen.drawPixel(259, 128);
+
+
+        // =============================================
+        // D. ENGINE CAVITIES
+        // =============================================
+
+        do Screen.setColor(true);
+
+        // Deep engine interiors
+        do Screen.drawCircle(170, 120, 12);
+        do Screen.drawCircle(170, 160, 12);
+
+        do Screen.setColor(false);
+
+        // Inner engine rings
+        do Screen.drawCircle(170, 120, 7);
+        do Screen.drawCircle(170, 160, 7);
+
+        do Screen.setColor(true);
+
+        // Dark exhaust cores
+        do Screen.drawCircle(170, 120, 4);
+        do Screen.drawCircle(170, 160, 4);
+
+        do Screen.setColor(false);
+
+        // Bright exhaust details
+        do Screen.drawLine(163, 119, 166, 121);
+        do Screen.drawLine(163, 159, 166, 161);
+
+
+        // =============================================
+        // E. PANEL GEOMETRY
+        // =============================================
+
+        do Screen.setColor(true);
+
+        // Main hull separation
+        do Screen.drawLine(240, 100, 240, 180);
+
+        // Horizontal armor seam
+        do Screen.drawLine(195, 140, 300, 140);
+
+        // Angled panel boundaries
+        do Screen.drawLine(245, 108, 265, 123);
+        do Screen.drawLine(245, 172, 265, 157);
+
+        // Rear armor plates
+        do Screen.drawLine(195, 115, 220, 115);
+        do Screen.drawLine(195, 165, 220, 165);
+
+        do Screen.drawLine(215, 110, 215, 132);
+        do Screen.drawLine(215, 148, 215, 170);
+
+        // Forward armor plates
+        do Screen.drawLine(275, 120, 295, 130);
+        do Screen.drawLine(275, 160, 295, 150);
+
+        // Mechanical divisions
+        do Screen.drawLine(230, 125, 235, 125);
+        do Screen.drawLine(230, 155, 235, 155);
+
+        do Screen.drawLine(285, 132, 292, 132);
+        do Screen.drawLine(285, 148, 292, 148);
+
+
+        // =============================================
+        // F. DENSE HULL DITHERING
+        // =============================================
+
+        do Screen.setColor(true);
+
+        // Main lower hull
+        let x = 190;
+
+        while (x < 295) {
+            do Screen.drawLine(x, 150, x, 157);
+            let x = x + 3;
+        }
+
+        // Rear upper crosshatching
+        let x = 195;
+
+        while (x < 235) {
+            do Screen.drawLine(x, 112, x, 118);
+            let x = x + 3;
+        }
+
+        // Dense underside texture
+        let x = 190;
+
+        while (x < 235) {
+            do Screen.drawLine(x, 163, x, 168);
+            let x = x + 2;
+        }
+
+        // Forward hull shading
+        let x = 250;
+
+        while (x < 290) {
+            do Screen.drawPixel(x, 145);
+            do Screen.drawPixel(x, 148);
+            let x = x + 3;
+        }
+
+
+        // =============================================
+        // G. WING TEXTURE
+        // =============================================
+
+        // Upper wing shading
+        let y = 90;
+
+        while (y < 115) {
+            do Screen.drawLine(215, y, 222, y);
+            let y = y + 3;
+        }
+
+        // Lower wing shading
+        let y = 175;
+
+        while (y < 225) {
+            do Screen.drawLine(215, y, 222, y);
+            let y = y + 3;
+        }
+
+        // Wing panel seams
+        do Screen.drawLine(205, 85, 220, 95);
+        do Screen.drawLine(205, 195, 220, 185);
+
+
+        // =============================================
+        // H. METALLIC EDGE HIGHLIGHTS
+        // =============================================
+
+        do Screen.setColor(false);
+
+        // Rear hull reflections
+        do Screen.drawLine(185, 118, 215, 118);
+        do Screen.drawLine(190, 112, 220, 112);
+
+        // Front hull reflections
+        do Screen.drawLine(245, 112, 270, 112);
+        do Screen.drawLine(250, 108, 265, 108);
+
+        // Wing edges
+        do Screen.drawLine(220, 42, 224, 42);
+        do Screen.drawLine(220, 238, 224, 238);
+
+        // Wing surface glints
+        do Screen.drawLine(225, 50, 225, 75);
+        do Screen.drawLine(225, 205, 225, 230);
+
+        // Engine highlights
+        do Screen.drawPixel(163, 120);
+        do Screen.drawPixel(163, 160);
+
+
+        // =============================================
+        // I. MICRODETAILS
+        // =============================================
+
+        do Screen.setColor(true);
+
+        // Hull rivets
+        do Screen.drawPixel(195, 125);
+        do Screen.drawPixel(200, 125);
+        do Screen.drawPixel(205, 125);
+
+        do Screen.drawPixel(195, 155);
+        do Screen.drawPixel(200, 155);
+        do Screen.drawPixel(205, 155);
+
+        // Armor bolts
+        do Screen.drawPixel(235, 112);
+        do Screen.drawPixel(235, 168);
+        do Screen.drawPixel(285, 135);
+        do Screen.drawPixel(285, 145);
+
+        // Technical markings
+        do Screen.drawLine(205, 120, 212, 120);
+        do Screen.drawLine(205, 160, 212, 160);
+
+        // Final panel details
+        do Screen.drawPixel(270, 115);
+        do Screen.drawPixel(275, 118);
+        do Screen.drawPixel(270, 165);
+        do Screen.drawPixel(275, 162);
+
+        return;
+    }
+
+
+    // ====================================================
+    // HUD / TITLE SCREEN
+    // ====================================================
+
+    function void drawHUD() {
+
+        do Screen.setColor(false);
+
+        // =============================================
+        // TITLE HEADER
+        // =============================================
+
+        // Outer title frame
+        do Screen.drawLine(8, 8, 200, 8);
+        do Screen.drawLine(8, 8, 8, 42);
+        do Screen.drawLine(200, 8, 200, 42);
+        do Screen.drawLine(8, 42, 200, 42);
+
+        // Decorative extensions
+        do Screen.drawLine(15, 5, 35, 5);
+        do Screen.drawLine(180, 5, 195, 5);
+
+        // Main title
+        do Output.moveCursor(1, 3);
+        do Output.printString("OUTRUN_");
+
+        do Output.moveCursor(2, 3);
+        do Output.printString("TOMORROW");
+
+        // Identification
+        do Output.moveCursor(4, 3);
+        do Output.printString("RACE RACE RACE");
+
+
+        // =============================================
+        // START PROMPT
+        // =============================================
+
+        // Horizontal separators
+        do Screen.drawLine(145, 180, 365, 180);
+        do Screen.drawLine(145, 211, 365, 211);
+
+        do Output.moveCursor(16, 22);
+        do Output.printString("PRESS ANY KEY");
+
+        do Output.moveCursor(18, 25);
+        do Output.printString("TO START");
+
+        // Decorative arrows
+        do Screen.drawLine(135, 192, 140, 197);
+        do Screen.drawLine(140, 197, 135, 202);
+
+        do Screen.drawLine(375, 192, 380, 197);
+        do Screen.drawLine(380, 197, 375, 202);
+
+
+        // =============================================
+        // CONTROL PANEL
+        // =============================================
+
+        // Panel frame
+        do Screen.drawLine(8, 145, 125, 145);
+        do Screen.drawLine(8, 145, 8, 232);
+        do Screen.drawLine(125, 145, 125, 232);
+        do Screen.drawLine(8, 232, 125, 232);
+
+        // Heading
+        do Output.moveCursor(15, 2);
+        do Output.printString("CONTROLS");
+
+        do Screen.drawLine(14, 165, 118, 165);
+
+        // Racing controls
+        do Output.moveCursor(17, 2);
+        do Output.printString("W / UP  ACCEL");
+
+        do Output.moveCursor(18, 2);
+        do Output.printString("S / DOWN BRAKE");
+
+        do Output.moveCursor(19, 2);
+        do Output.printString("A / LEFT STEER");
+
+        do Output.moveCursor(20, 2);
+        do Output.printString("D / RIGHT STEER");
+
+        do Output.moveCursor(21, 2);
+        do Output.printString("SPACE POWERUP");
+
+
+        // =============================================
+        // FOOTER
+        // =============================================
+
+        do Screen.drawLine(8, 242, 503, 242);
+
+        do Output.moveCursor(22, 2);
+        do Output.printString("OUTRUN TOMORROW");
+
+        do Output.moveCursor(22, 43);
+        do Output.printString("NAND2TETRIS// JACK");
+
+        return;
+    }
+
+}
